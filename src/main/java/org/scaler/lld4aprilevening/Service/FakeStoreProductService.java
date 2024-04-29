@@ -1,7 +1,9 @@
 package org.scaler.lld4aprilevening.Service;
 
+import org.scaler.lld4aprilevening.Exceptions.ProductNotFound;
 import org.scaler.lld4aprilevening.Models.Category;
 import org.scaler.lld4aprilevening.Models.Product;
+import org.scaler.lld4aprilevening.dtos.FakeStoreRequestDto;
 import org.scaler.lld4aprilevening.dtos.FakeStoreResponseDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,11 +23,12 @@ public class FakeStoreProductService implements ProductService{
 
 
     @Override
-    public Product getProductById(long id) {
+    public Product getProductById(long id) throws ProductNotFound {
       FakeStoreResponseDto fdto = restTemplate.getForObject("https://fakestoreapi.com/products/"+id, FakeStoreResponseDto.class);
 
+
       if(fdto == null){
-          return null;
+          throw new ProductNotFound();
       }
 
       // if response is there convert the response into product...
@@ -51,6 +54,19 @@ public class FakeStoreProductService implements ProductService{
 
     }
 
+    public FakeStoreRequestDto ConvertProductToFakeStoreRequest(Product p){
+        FakeStoreRequestDto requestDto = new FakeStoreRequestDto();
+        requestDto.setCategory(p.getCategory().getTitle());
+        requestDto.setImage(p.getImage());
+        requestDto.setPrice(p.getPrice());
+        requestDto.setTitle(p.getTitle());
+        requestDto.setDesc(p.getDesc());
+
+        return requestDto;
+    }
+
+
+
 
     @Override
     public Product updateProduct(long id) {
@@ -64,6 +80,26 @@ public class FakeStoreProductService implements ProductService{
 
     @Override
     public Product createProduct(Product p) {
-        return null;
+
+        FakeStoreRequestDto fakeStoreRequestDto= ConvertProductToFakeStoreRequest(p);
+
+        FakeStoreResponseDto response = restTemplate.postForObject("https://fakestoreapi.com/products/",fakeStoreRequestDto, FakeStoreResponseDto.class);
+
+        if (response == null){
+            throw new RuntimeException("product is null");
+        }
+        return ConvertFakeStoreDtoToProduct(response);
     }
+
+    public Product[] getAllProducts() {
+       FakeStoreResponseDto[] fdto = restTemplate.getForObject("https://fakestoreapi.com/products/", FakeStoreResponseDto[].class);
+
+         Product[] products = new Product[fdto.length];
+            for(int i=0;i<fdto.length;i++){
+                products[i] = ConvertFakeStoreDtoToProduct(fdto[i]);
+            }
+            return products;
+    }
+
+
 }
