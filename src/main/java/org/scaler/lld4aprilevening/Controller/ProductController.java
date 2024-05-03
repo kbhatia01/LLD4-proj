@@ -46,9 +46,9 @@ public class ProductController {
     }
 
 
-    @PutMapping("/")
-    public Product updateProduct(@RequestBody Product product){
-        return new Product();
+    @PutMapping("/{id}")
+    public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product){
+        return ps.updateProduct(id, product);
     }
 
     @DeleteMapping("/{id}")

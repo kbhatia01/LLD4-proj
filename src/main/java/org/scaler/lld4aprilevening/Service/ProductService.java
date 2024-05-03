@@ -7,7 +7,7 @@ public interface ProductService {
 
   public  Product getProductById(long id) throws ProductNotFound;
 
-    Product updateProduct(long id);
+    Product updateProduct(long id, Product p);
     Product deleteProduct(long id);
     Product createProduct(Product p);
 

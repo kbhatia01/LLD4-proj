@@ -69,8 +69,17 @@ public class FakeStoreProductService implements ProductService{
 
 
     @Override
-    public Product updateProduct(long id) {
-        return null;
+    public Product updateProduct(long id, Product p) {
+        FakeStoreRequestDto requestDto = ConvertProductToFakeStoreRequest(p);
+       try {
+           restTemplate.put("https://fakestoreapi.com/products/" + id, requestDto);
+       } catch (Exception e){
+           System.out.println("Error occured");
+       }
+
+
+
+        return p;
     }
 
     @Override
