@@ -1,11 +1,16 @@
 package org.scaler.lld4aprilevening.Models;
 
 
-import lombok.Data;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
-public class Category {
+@Entity
+@Getter
+@Setter
+public class Category extends BaseModel{
 
-    private long id;
     private String title;
 }

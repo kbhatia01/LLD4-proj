@@ -40,7 +40,7 @@ public class FakeStoreProductService implements ProductService{
 
         Product p = new Product();
         p.setId(fdto.getId());
-        p.setDesc(fdto.getDesc());
+        p.setDescription(fdto.getDesc());
         p.setTitle(fdto.getTitle());
         p.setPrice(fdto.getPrice());
         p.setImage(fdto.getImage());
@@ -60,7 +60,7 @@ public class FakeStoreProductService implements ProductService{
         requestDto.setImage(p.getImage());
         requestDto.setPrice(p.getPrice());
         requestDto.setTitle(p.getTitle());
-        requestDto.setDesc(p.getDesc());
+        requestDto.setDesc(p.getDescription());
 
         return requestDto;
     }
