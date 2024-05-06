@@ -15,12 +15,12 @@ public class Product extends BaseModel{
     private String description;
     private String image;
     @ManyToOne
+    @JoinColumn
     private Category category;
 
 }
 
 
-// 10:11
 /*
     1               1
     Product ---> Category ===> m:1

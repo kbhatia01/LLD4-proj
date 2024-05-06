@@ -4,6 +4,7 @@ package org.scaler.lld4aprilevening.Controller;
 import org.scaler.lld4aprilevening.Exceptions.ProductNotFound;
 import org.scaler.lld4aprilevening.Models.Product;
 import org.scaler.lld4aprilevening.Service.ProductService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ import java.util.List;
 public class ProductController {
 
     private ProductService ps;
-    public ProductController(ProductService productService){
+    public ProductController(@Qualifier("SelfProductService") ProductService productService){
         this.ps = productService;
     }
 
@@ -46,7 +47,7 @@ public class ProductController {
     }
 
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public Product updateProduct(@PathVariable("id") Long id, @RequestBody Product product){
         return ps.updateProduct(id, product);
     }

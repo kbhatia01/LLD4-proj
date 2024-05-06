@@ -28,7 +28,7 @@ public class FakeStoreProductService implements ProductService{
 
 
       if(fdto == null){
-          throw new ProductNotFound();
+          throw new ProductNotFound("Product not found");
       }
 
       // if response is there convert the response into product...
@@ -72,7 +72,7 @@ public class FakeStoreProductService implements ProductService{
     public Product updateProduct(long id, Product p) {
         FakeStoreRequestDto requestDto = ConvertProductToFakeStoreRequest(p);
        try {
-           restTemplate.put("https://fakestoreapi.com/products/" + id, requestDto);
+           restTemplate.patchForObject("https://fakestoreapi.com/products/" + id, requestDto, FakeStoreResponseDto.class);
        } catch (Exception e){
            System.out.println("Error occured");
        }

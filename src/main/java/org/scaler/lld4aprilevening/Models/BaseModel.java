@@ -11,10 +11,11 @@ import java.util.Date;
 
 @Data
 @MappedSuperclass
-public class BaseModel {
+public abstract class BaseModel {
 
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private Date CreatedAt;
 
