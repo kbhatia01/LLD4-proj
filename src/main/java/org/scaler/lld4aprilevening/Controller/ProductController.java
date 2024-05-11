@@ -40,7 +40,11 @@ public class ProductController {
 
     @GetMapping("/")
     public List<Product> getAllProducts(){
-      return List.of(ps.getAllProducts());
+        Product[] products = ps.getAllProducts();
+
+        products[0].setTitle("abc");
+
+      return List.of(products);
     }
     @PostMapping("/")
     public Product createProduct(@RequestBody Product product){
