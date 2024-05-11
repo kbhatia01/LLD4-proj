@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 
-//@Primary
+@Primary
 @Service("SelfProductService")
 public class SelfProductService implements ProductService{
 

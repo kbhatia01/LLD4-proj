@@ -24,7 +24,9 @@ public class ProductController {
     public ResponseEntity<Product> getProductById(@PathVariable("id") long id) throws ProductNotFound {
 
 
-            return new ResponseEntity<>(ps.getProductById(id), HttpStatus.OK);
+            Product p = ps.getProductById(id); // dependency..
+
+            return new ResponseEntity<>(p, HttpStatus.OK);
 //try{
 //        } catch (ArithmeticException ae){
 //            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
