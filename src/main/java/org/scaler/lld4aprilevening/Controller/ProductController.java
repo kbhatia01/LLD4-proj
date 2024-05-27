@@ -4,6 +4,9 @@ package org.scaler.lld4aprilevening.Controller;
 import org.scaler.lld4aprilevening.Exceptions.ProductNotFound;
 import org.scaler.lld4aprilevening.Models.Product;
 import org.scaler.lld4aprilevening.Service.ProductService;
+import org.scaler.lld4aprilevening.common.AuthCommon;
+import org.scaler.lld4aprilevening.dtos.Roles;
+import org.scaler.lld4aprilevening.dtos.UserDto;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,17 +19,31 @@ import java.util.List;
 public class ProductController {
 
     private ProductService ps;
-    public ProductController(@Qualifier("SelfProductService") ProductService productService){
+
+    private AuthCommon authCommon;
+    public ProductController(@Qualifier("SelfProductService") ProductService productService,
+                             AuthCommon authCommon){
         this.ps = productService;
+        this.authCommon = authCommon;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable("id") long id) throws ProductNotFound {
+    public ResponseEntity<Product> getProductById(@PathVariable("id") long id, @RequestHeader("Auth") String auth) throws ProductNotFound {
 
 
-            Product p = ps.getProductById(id); // dependency..
+            UserDto user = authCommon.validate(auth);
 
-            return new ResponseEntity<>(p, HttpStatus.OK);
+            if (user != null){
+                for(Roles r : user.getRoles()){
+                    if (r.getRole() == "ADMIN"){
+                        Product p = ps.getProductById(id); // dependency..
+
+                        return new ResponseEntity<>(p, HttpStatus.OK);
+                    }
+                }
+            }
+
+        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
 //try{
 //        } catch (ArithmeticException ae){
 //            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -40,11 +57,7 @@ public class ProductController {
 
     @GetMapping("/")
     public List<Product> getAllProducts(){
-        Product[] products = ps.getAllProducts();
-
-        products[0].setTitle("abc");
-
-      return List.of(products);
+      return List.of(ps.getAllProducts());
     }
     @PostMapping("/")
     public Product createProduct(@RequestBody Product product){

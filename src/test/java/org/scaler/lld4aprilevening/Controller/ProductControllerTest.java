@@ -37,7 +37,7 @@ class ProductControllerTest {
 
         ResponseEntity<Product> ExpectedResponseEntity = new ResponseEntity<>(p, HttpStatus.OK);
 
-       ResponseEntity<Product> ActualResponse =  productController.getProductById(1L);
+       ResponseEntity<Product> ActualResponse =  productController.getProductById(1L, "");
 
        assertEquals(ExpectedResponseEntity, ActualResponse);
 
@@ -53,14 +53,23 @@ class ProductControllerTest {
         when(productService.getProductById(1L)).thenThrow(productNotFound);
 
 
-        assertThrows(ProductNotFound.class,()->productController.getProductById(1L));
+        assertThrows(ProductNotFound.class,()->productController.getProductById(1L, ""));
     }
 
 
     @Test
     void TestGetAllProducts() {
 
+        Product[] products = createThreeProducts();
 
+        when(productService.getAllProducts()).thenReturn(products);
+        List<Product> actualProducts =  productController.getAllProducts();
+        assertEquals(products, actualProducts);
+
+    }
+
+
+    public Product[] createThreeProducts(){
         Product p1 = new Product();
         Product p2 = new Product();
         Product p3 = new Product();
@@ -78,10 +87,7 @@ class ProductControllerTest {
             p[i]= products.get(i);
         }
 
-        when(productService.getAllProducts()).thenReturn(p);
-        List<Product> actualProducts =  productController.getAllProducts();
-        assertEquals(products, actualProducts);
-
+        return p;
     }
 
 

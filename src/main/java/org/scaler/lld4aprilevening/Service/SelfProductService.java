@@ -3,6 +3,7 @@ package org.scaler.lld4aprilevening.Service;
 import org.scaler.lld4aprilevening.Exceptions.ProductNotFound;
 import org.scaler.lld4aprilevening.Models.Category;
 import org.scaler.lld4aprilevening.Models.Product;
+import org.scaler.lld4aprilevening.common.AuthCommon;
 import org.scaler.lld4aprilevening.repo.CategoryRepo;
 import org.scaler.lld4aprilevening.repo.ProductRepo;
 import org.springframework.context.annotation.Primary;
@@ -18,7 +19,8 @@ public class SelfProductService implements ProductService{
     private ProductRepo productRepo;
     private CategoryRepo categoryRepo;
     SelfProductService(ProductRepo productRepo,
-                       CategoryRepo categoryRepo){
+                       CategoryRepo categoryRepo,
+                       AuthCommon authCommon){
         this.productRepo = productRepo;
         this.categoryRepo = categoryRepo;
     }
